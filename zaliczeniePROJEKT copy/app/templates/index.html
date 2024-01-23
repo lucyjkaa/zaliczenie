@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Fuel Calculator</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Style the header */
+        header {
+            background-color: #666666;
+            padding: 30px;
+            text-align: center;
+            font-size: 35px;
+            color: rgb(255, 255, 255);
+        }
+
+        /* Container for flexboxes */
+        section {
+            display: -webkit-flex;
+            display: flex;
+        }
+
+        /* Style the navigation menu */
+        nav {
+            -webkit-flex: 1;
+            -ms-flex: 1;
+            flex: 1;
+            background: #ccc;
+            padding: 20px;
+        }
+
+        /* Style the list inside the menu */
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        /* Style the content */
+        article {
+            -webkit-flex: 3;
+            -ms-flex: 3;
+            flex: 3;
+            background-color: #f1f1f1;
+            padding: 10px;
+        }
+
+        /* Style the footer */
+        footer {
+            background-color: #777;
+            padding: 10px;
+            text-align: center;
+            color: white;
+        }
+
+        /* Stylowanie rozwijanej listy */
+        select {
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+            width: 200px;
+        }
+
+        /* Stylowanie przycisku */
+        button {
+            background-color: #f4511e;
+            border: none;
+            color: white;
+            padding: 16px 32px;
+            text-align: center;
+            font-size: 16px;
+            margin: 4px 2px;
+            opacity: 0.6;
+            transition: 0.3s;
+            display: inline-block;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            opacity: 1;
+        }
+
+        /* Stylowanie checkboxów */
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Kalkulator paliwa</h1>
+    </header>
+    <section>
+        <nav>
+            <!-- Możesz dodać nawigację tutaj, jeśli to potrzebne -->
+        </nav>
+        <article>
+            <form method="post" action="{% url 'fuel_calculation' %}">
+                {% csrf_token %}
+                <p>Wybór pojazdu</p>
+                {{ form.vehicle_type }}<br>
+                <p>Wybór trasy</p>
+                {{ form.route_choice }}<br>
+                <div id="additionalStops">
+                    <!-- Pole wyboru dodatkowych postojów będzie tutaj dynamicznie dodawane -->
+                </div>
+                <button type="submit">Oblicz</button>
+            </form>
+        </article>
+    </section>
+    <footer>
+        <!-- Możesz dodać treść stopki tutaj, jeśli to potrzebne -->
+    </footer>
+
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', function () {
+            var routeChoiceSelect = document.getElementById('id_route_choice');
+            var additionalStopsDiv = document.getElementById('additionalStops');
+
+            routeChoiceSelect.addEventListener('change', function () {
+                var routeChoice = routeChoiceSelect.value;
+
+                // Wyczyszczenie poprzednich checkboxów
+                additionalStopsDiv.innerHTML = '';
+
+                if (routeChoice === '1') {
+                    createCheckbox('lodz', 'Łódź');
+                    createCheckbox('kalisz', 'Kalisz');
+                } else if (routeChoice === '2') {
+                    createCheckbox('radom', 'Radom');
+                    createCheckbox('kielce', 'Kielce');
+                } else if (routeChoice === '3') {
+                    createCheckbox('lodz', 'Łódź');
+                    createCheckbox('torun', 'Toruń');
+                }
+            });
+
+            function createCheckbox(value, label) {
+                var checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.name = 'stop';
+                checkbox.value = value;
+
+                var checkboxLabel = document.createElement('label');
+                checkboxLabel.appendChild(checkbox);
+                checkboxLabel.appendChild(document.createTextNode(' ' + label));
+
+                additionalStopsDiv.appendChild(checkboxLabel);
+            }
+        });
+    </script>
+</body>
+</html>
+

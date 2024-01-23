@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Results</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Style the header */
+        header {
+            background-color: #666666;
+            padding: 30px;
+            text-align: center;
+            font-size: 35px;
+            color: rgb(255, 255, 255);
+        }
+        
+
+        /* Container for flexboxes */
+        section {
+            display: -webkit-flex;
+            display: flex;
+        }
+
+        /* Style the navigation menu */
+        nav {
+            -webkit-flex: 1;
+            -ms-flex: 1;
+            flex: 1;
+            background: #ccc;
+            padding: 20px;
+        }
+
+        /* Style the list inside the menu */
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        /* Style the content */
+        article {
+            -webkit-flex: 3;
+            -ms-flex: 3;
+            flex: 3;
+            background-color: #f1f1f1;
+            padding: 10px;
+        }
+
+        /* Style the footer */
+        footer {
+            background-color: #777;
+            padding: 10px;
+            text-align: center;
+            color: white;
+        }
+        button {
+            background-color: #f4511e;
+            border: none;
+            color: white;
+            padding: 16px 32px;
+            text-align: center;
+            font-size: 16px;
+            margin: 4px 2px;
+            opacity: 0.6;
+            transition: 0.3s;
+            display: inline-block;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <header><h1>Najlepsze wyniki</h1></header>
+    <section>
+        <article>
+            {% if selected_additional_stops %}
+                <h2>Dodatkowe przystanki:</h2>
+                <ul>
+                    {% for stop in selected_additional_stops %}
+                        <li>{{ stop|title }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            <h2>Kierunek docelowy: {% if route_choice == '1' %}
+                    Wrocław
+                {% elif route_choice == '2' %}
+                    Kraków
+                {% elif route_choice == '3' %}
+                    Gdańsk
+                {% endif %}
+            </h2>
+            <p>Potrzebne paliwo: {{ fuel_needed|floatformat:0 }} litrów</p>
+            <p>Całkowity dystans trasy: {{ total_distance }} km</p>
+            <p>Najoptymalniejsza stacja: {{ optimal_station }}</p>
+        </article>
+        <button onclick="goBack()">Powrót</button>
+    </section>
+{% if optimal_station == 'G1 Shell' %}
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d18811.758251738644!2d18.605861476703804!3d53.8878536131245!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x470299b13a6b5517%3A0x461c6bc49de2c25!2sShell!5e0!3m2!1spl!2spl!4v1704841829018!5m2!1spl!2spl" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+{% elif optimal_station == 'G2 Mol' %}
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d19054.978329062946!2d18.7095291412625!3d53.345542252538046!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4702d65e7f8f9fc9%3A0x3320b5e1983b862e!2sStacja%20Paliw%20MOL!5e0!3m2!1spl!2spl!4v1704842063299!5m2!1spl!2spl" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+{% elif optimal_station == 'G3 BP' %}
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2399.537105333861!2d18.765425716087005!3d53.02868373321146!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x471ccb62241f6c3b%3A0x9151c7d7ae1dd0ca!2sbp!5e0!3m2!1spl!2spl!4v1704842117077!5m2!1spl!2spl" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+{% elif optimal_station == 'W1 Orlen' %}
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d16805.867146467655!2d17.1995261369021!3d51.23368068955267!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x470fe56e27e62ee9%3A0xd30826ed28ce320c!2sStacja%20Paliw%20ORLEN!5e0!3m2!1spl!2spl!4v1704842185727!5m2!1spl!2spl" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+{% elif optimal_station == 'W2 Mol' %}
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d48839.88806118645!2d17.988784017925862!3d51.31558083875007!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x471a9f8191342a43%3A0x154fbfa6c388276!2sStacja%20Paliw%20MOL!5e0!3m2!1spl!2spl!4v1704842287001!5m2!1spl!2spl" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+{% elif optimal_station == 'W3 Shell' %}
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15185.887001041521!2d19.690735744125927!3d51.90280332446486!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x471bc57d3ba139c3%3A0xb50943040a2bebfa!2sShell!5e0!3m2!1spl!2spl!4v1704842340028!5m2!1spl!2spl" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+{% elif optimal_station == 'K2 Shell' %}
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d11803.114751361507!2d21.05652400494633!3d51.54441203380485!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4718f95d7b2b8a2f%3A0x198070e77737ca5e!2sStacja%20paliw%20Shell!5e0!3m2!1spl!2spl!4v1704842427434!5m2!1spl!2spl" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+{% elif optimal_station == 'K1 Mol' %}
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d33750.19069971642!2d20.757740003926198!3d51.0438930543826!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47183b0d644dc2bd%3A0x2d67eb5295d3c410!2sStacja%20Paliw%20MOL!5e0!3m2!1spl!2spl!4v1704842477126!5m2!1spl!2spl" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+{% elif optimal_station == 'K3 Mol' %}
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d96427.08565221683!2d20.127666518903784!3d50.5729963121471!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4717a1fb4a7772dd%3A0xf4a10bb9eaa29e5f!2sStacja%20Paliw%20MOL!5e0!3m2!1spl!2spl!4v1704842504272!5m2!1spl!2spl" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+{% endif %}
+  </body>
+  
+  <script>
+    // JavaScript function to go back to the previous page
+    function goBack() {
+        window.history.back();
+    }
+</script>
+    
+</html>
